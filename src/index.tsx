@@ -4,10 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+
 const renderReactDom = () => {
   ReactDOM.render(<App />, document.getElementById('root'));
 };
-
+// @ts-ignore: Unreachable code error
 if (window.cordova) {
   document.addEventListener('deviceready', () => {
     renderReactDom();
