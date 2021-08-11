@@ -7,7 +7,7 @@ import { User } from './models/User';
 function App() {
   const sqliteDb = useSqlite();
   const [inputUser, setInputUser] = useState<User>({
-    userId: 0,
+    userId: null,
     name: '',
     email: '',
     status: false
@@ -28,9 +28,6 @@ function App() {
   const handleInputEmail = (e: any) => {
     setInputUser((prev) => ({...prev, email: e.target.value}));
   };
-  const handleInputStatus = (e: any) => {
-    setInputUser((prev) => ({...prev, status: e.target.value}));
-  };
   const handleInputDelete = (e: any) => {
     setDeleteId(e.target.value);
   };
@@ -40,7 +37,7 @@ function App() {
 
   const handleInsert = () => {
     sqliteDb.insert(inputUser);
-    setInputUser((prev) => ({...prev,userId: 0, name: '', email: '', status: false}));
+    setInputUser((prev) => ({...prev,userId: null, name: '', email: '', status: false}));
     handleFetch();
   }
 
@@ -57,32 +54,32 @@ function App() {
 
   const handleUpdate = () => {
     sqliteDb.update(inputUser);
-    setInputUser({userId: 0, name: '', email: '', status: false});
+    setInputUser({userId: null, name: '', email: '', status: false});
     handleFetch();
   }
 
   const inserMany = () => {
     const users: User[] = [
       {
-        userId: 5,
+        userId: '5',
         name: '5',
         email: '5',
         status: false
       },
       {
-        userId: 6,
+        userId: '6',
         name: '6',
         email: '6',
         status: false
       },
       {
-        userId: 7,
+        userId: '6',
         name: '7',
         email: '7',
         status: false
       },
       {
-        userId: 8,
+        userId: '8',
         name: '8',
         email: '8',
         status: false
@@ -117,7 +114,6 @@ function App() {
           <input value={inputUser.userId} placeholder='userId' onChange={handleInputUserId}/>
           <input value={inputUser.name} placeholder='name' onChange={handleInputName}/>
           <input value={inputUser.email} placeholder='email' onChange={handleInputEmail}/>
-          <input value={inputUser.status ? 'true' : 'false'} placeholder='status' onChange={handleInputStatus}/>
         </div>
         <div style={{display: 'flex', justifyContent:'space-between'}}>
           <button onClick={handleInsert}>Insert</button>

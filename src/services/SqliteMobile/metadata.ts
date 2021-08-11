@@ -3,7 +3,7 @@ export interface StringMap {
 }
 export interface Statement {
   query: string;
-  args?: any[];
+  params?: any[];
 }
 
 export interface Manager {
@@ -11,13 +11,13 @@ export interface Manager {
   execBatch(statements: Statement[]): Promise<number>;
   query<T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]): Promise<T[]>;
   queryOne<T>(sql: string, args?: any[], m?: StringMap, bools?: Attribute[]): Promise<T>;
-  executeScalar<T>(sql: string, args?: any[]): Promise<T>;
+  execScalar<T>(sql: string, args?: any[]): Promise<T>;
   count(sql: string, args?: any[]): Promise<number>;
 }
 
 export type DataType = 'ObjectId' | 'date' | 'datetime' | 'time'
-    | 'boolean' | 'number' | 'integer' | 'string' | 'text'
-    | 'object' | 'array' | 'primitives' | 'binary';
+  | 'boolean' | 'number' | 'integer' | 'string' | 'text'
+  | 'object' | 'array' | 'primitives' | 'binary';
 export type FormatType = 'currency' | 'percentage' | 'email' | 'url' | 'phone' | 'fax' | 'ipv4' | 'ipv6';
 export type MatchType = 'equal' | 'prefix' | 'contain' | 'max' | 'min'; // contain: default for string, min: default for Date, number
 
@@ -31,7 +31,7 @@ export interface Attribute {
   field?: string;
   type?: DataType;
   match?: MatchType;
-  default?: string|number|Date;
+  default?: string | number | Date;
   key?: boolean;
   noinsert?: boolean;
   noupdate?: boolean;
@@ -42,11 +42,11 @@ export interface Attribute {
   max?: number;
   gt?: number;
   lt?: number;
-  exp?: RegExp|string;
+  exp?: RegExp | string;
   code?: string;
   typeof?: Attributes;
-  true?: string|number;
-  false?: string|number;
+  true?: string | number;
+  false?: string | number;
 }
 export interface Attributes {
   [key: string]: Attribute;

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { User } from "./models/User";
 import { Statement } from "./services/SqliteMobile/metadata";
-import { PoolMangaer } from "./services/SqliteMobile/SqliteMobile";
+import { DatabaseManager } from "./services/SqliteMobile/SqliteMobile";
 
 export const useSqlite = () => {
   // @ts-ignore: Unreachable code error
   const database = window.sqlitePlugin.openDatabase('database.db','1.0', 'user database', 1000000);
   const [users, setUser] = useState<User[]>([]);
-  const sqliteUser = new PoolMangaer(database);
+  const sqliteUser = new DatabaseManager(database);
 
   useEffect(() => {
       (() => {
@@ -18,7 +18,7 @@ export const useSqlite = () => {
 
   const initTable = () => {
     const string = `CREATE TABLE IF NOT EXISTS users(
-      userId INTEGER PRIMARY KEY,
+      userId TEXT PRIMARY KEY NOT NULL,
       name TEXT,
       email TEXT,
       status BOOLEAN
@@ -61,8 +61,8 @@ export const useSqlite = () => {
   };
 
   const update = (user: User) => {
-    const string = 'UPDATE users SET name=? ,email=?,status=? WHERE userId=?';
-    const args = [user.name, user.email, user.status,user.userId];
+    const string = 'UPDATE users SET name=?,email=?,status=? WHERE userId=?';
+    const args = [user.name, user.email, user.status, user.userId];
     sqliteUser.exec(string, args).then(() => {
       alert('Update Success!');
     }).catch(() => {
@@ -72,9 +72,10 @@ export const useSqlite = () => {
 
   const insertMany = (users: User[]) => {
     const statements: Statement[] = users.map((item) => {
-      return { query: 'INSERT INTO users (userId, name, email, status) VALUES (?,?,?,?)', args: [item.userId, item.name, item.email, item.status]};
+      return { query: 'INSERT INTO users (userId, name, email, status) VALUES (?,?,?,?)', params: [item.userId, item.name, item.email, item.status]};
     });
     return sqliteUser.execBatch(statements).then(() => {
+      console.log({statements});
       alert('Success!');
     }).catch(() => alert('Rollback!'));
   }
