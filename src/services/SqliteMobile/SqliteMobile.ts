@@ -136,7 +136,6 @@ export function exec(db: any, sql: string, args?: any[]): Promise<number> {
 }
 export function query<T>(db: any, sql: string, args?: any[], m?: StringMap, bools?: Attribute[]): Promise<T[]> {
   const p = args ? args : [];
-  console.log(db);
   if (db.executeSql) {
     return new Promise<T[]>((resolve, reject) => {
       db.executeSql(sql, p, (tx, results: any) => {
@@ -171,7 +170,6 @@ export function queryOne<T>(db: any, sql: string, args?: any[], m?: StringMap, b
     return new Promise<T>((resolve, reject) => {
       return db.transaction(txn => {
         txn.executeSql(sql, p, (tx, result: any) => {
-          console.log({ tx }, { result });
           if (result.rows && result.rows._array && result.rows.length > 0) {
             return resolve(handleResult<T>(result.rows._array, m, bools));
           } else {
