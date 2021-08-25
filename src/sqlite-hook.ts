@@ -5,15 +5,15 @@ import { DatabaseManager } from "./services/SqliteMobile/SqliteMobile";
 
 export const useSqlite = () => {
   // @ts-ignore: Unreachable code error
-  const database = window.sqlitePlugin.openDatabase('database.db','1.0', 'user database', 1000000);
+  const database = window.sqlitePlugin.openDatabase('database.db', '1.0', 'user database', 1000000);
   const [users, setUser] = useState<User[]>([]);
   const sqliteUser = new DatabaseManager(database);
 
   useEffect(() => {
-      (() => {
-        // deleteTable();
-        initTable();
-      })();
+    (() => {
+      // deleteTable();
+      initTable();
+    })();
   }, []);
 
   const initTable = () => {
@@ -46,7 +46,7 @@ export const useSqlite = () => {
 
   const insert = (user: User) => {
     const string = 'INSERT INTO users (userId, name, email, status) VALUES (?,?,?,?)';
-    const args =[user.userId, user.name, user.email, user.status];
+    const args = [user.userId, user.name, user.email, user.status];
     sqliteUser.exec(string, args).then(() => {
       alert('Insert Success!');
     }).catch(() => alert('Insert Failed!'));
@@ -72,13 +72,12 @@ export const useSqlite = () => {
 
   const insertMany = (users: User[]) => {
     const statements: Statement[] = users.map((item) => {
-      return { query: 'INSERT INTO users (userId, name, email, status) VALUES (?,?,?,?)', params: [item.userId, item.name, item.email, item.status]};
+      return { query: 'INSERT INTO users (userId, name, email, status) VALUES (?,?,?,?)', params: [item.userId, item.name, item.email, item.status] };
     });
-    return sqliteUser.execBatch(statements).then(() => {
-      console.log({statements});
+    return sqliteUser.execBatch(statements, true).then(() => {
       alert('Success!');
     }).catch(() => alert('Rollback!'));
   }
 
-  return {database, all, insert, users, deleteUser, load, update, insertMany};
+  return { database, all, insert, users, deleteUser, load, update, insertMany };
 };
